@@ -1,5 +1,5 @@
 # Don't want other bots having the same permissions
-permissions.ser
+permissions.xml
 
 ### Maven template
 target/

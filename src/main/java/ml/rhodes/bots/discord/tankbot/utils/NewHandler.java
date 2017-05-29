@@ -1,9 +1,10 @@
 package ml.rhodes.bots.discord.tankbot.utils;
 
 import de.btobastian.sdcf4j.handler.Discord4JHandler;
-import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.IDiscordClient;
 
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,37 +104,36 @@ public class NewHandler extends Discord4JHandler {
     }
 
     /**
-     * Load user permissions
+     * Saves user permissions in XML format
      */
-    public void loadPermissions() {
+    public void savePermissions() {
         try {
-            FileInputStream fileInputStream = new FileInputStream("permissions.ser");
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            this.permissions = (HashMap<String, List<String>>) objectInputStream.readObject();
-            objectInputStream.close();
-            fileInputStream.close();
-            Discord4J discord4J = new Discord4J();
-            Discord4J.LOGGER.info("Permissions file loaded");
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        } catch (ClassNotFoundException exception) {
-            exception.printStackTrace();
+            FileOutputStream fileOutputStream = new FileOutputStream("permissions.xml");
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            XMLEncoder xmlEncoder = new XMLEncoder(fileOutputStream);
+            xmlEncoder.writeObject(this.permissions);
+            xmlEncoder.close();
+            fileOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.getStackTrace();
+        } catch (IOException e) {
+            e.getStackTrace();
         }
     }
 
     /**
-     * Save user permissions
+     * Loads user permissions from XML file
      */
-    public void savePermissions() {
+    public void loadPermissions() {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("permissions.ser");
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(this.permissions);
-            objectOutputStream.close();
-            fileOutputStream.close();
-            Discord4J.LOGGER.info("Permissions file saved");
-        } catch (IOException exception) {
-            exception.printStackTrace();
+            FileInputStream fileInputStream = new FileInputStream("permissions.xml");
+            XMLDecoder xmlDecoder = new XMLDecoder(fileInputStream);
+            this.permissions = (HashMap<String, List<String>>) xmlDecoder.readObject();
+            fileInputStream.close();
+        } catch (FileNotFoundException e) {
+            e.getStackTrace();
+        } catch (IOException e) {
+            e.getStackTrace();
         }
     }
 }
