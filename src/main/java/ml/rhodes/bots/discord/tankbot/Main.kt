@@ -18,7 +18,6 @@ object Main {
      */
     @JvmStatic fun main(args: Array<String>) {
         client = Bot.createClient(args[0], true) // Gets the client object (from the first example)
-
         handler = NewHandler(client)
 
         handler!!.loadPermissions()
@@ -33,6 +32,7 @@ object Main {
 
         Runtime.getRuntime().addShutdownHook(Thread {
             fun run() {
+                handler!!.savePermissions()
                 print("Shutdown Run!")
             }
         })

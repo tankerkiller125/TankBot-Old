@@ -1,6 +1,7 @@
 package ml.rhodes.bots.discord.tankbot.utils;
 
 import de.btobastian.sdcf4j.handler.Discord4JHandler;
+import sx.blah.discord.Discord4J;
 import sx.blah.discord.api.IDiscordClient;
 
 import java.io.*;
@@ -12,7 +13,6 @@ import java.util.List;
 public class NewHandler extends Discord4JHandler {
 
     private HashMap<String, List<String>> permissions = new HashMap<String, List<String>>();
-
     public NewHandler(IDiscordClient client) {
         super(client);
     }
@@ -112,7 +112,8 @@ public class NewHandler extends Discord4JHandler {
             this.permissions = (HashMap<String, List<String>>) objectInputStream.readObject();
             objectInputStream.close();
             fileInputStream.close();
-            System.out.print("Permissions file loaded\n");
+            Discord4J discord4J = new Discord4J();
+            Discord4J.LOGGER.info("Permissions file loaded");
         } catch (IOException exception) {
             exception.printStackTrace();
         } catch (ClassNotFoundException exception) {
@@ -130,7 +131,7 @@ public class NewHandler extends Discord4JHandler {
             objectOutputStream.writeObject(this.permissions);
             objectOutputStream.close();
             fileOutputStream.close();
-            System.out.print("Permissions file saved\n");
+            Discord4J.LOGGER.info("Permissions file saved");
         } catch (IOException exception) {
             exception.printStackTrace();
         }
